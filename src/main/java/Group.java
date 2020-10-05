@@ -1,30 +1,15 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
 public class Group {
-    private int groupNumber;
-    private List<Student> students;
+    private GroupId groupId;
 
-    public Group(int groupNumber, ArrayList<Student> students, TreeMap<Student, ArrayList<Task>> studentTasks) {
-        this.groupNumber = groupNumber;
-        this.students = students;
-    }
-    public List<Student> getStudents() {
-        return students;
+    public Group(GroupId groupId) {
+        this.groupId = groupId;
     }
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
+    public GroupId getGroupId() {
+        return groupId;
     }
 
-    public int getGroupNumber() {
-        return groupNumber;
+    public String toStr(){
+        return this.groupId.name;
     }
-
-    public void setGroupNumber(int groupNumber) {
-        this.groupNumber = groupNumber;
-    }
-
 }

@@ -1,66 +1,50 @@
+import java.util.List;
+
 public class Student {
+    private StudentId studentId;
     private String name;
-    private int cardNumber;
     private int yearNumber;
-    private int groupNumber;
+    private GroupId groupId;
     private String faculty;
-    private Task[] tasks;
+    private List<Task> tasks;
 
 
-    public Student(String name, int cardNumber, int yearNumber, int groupNumber, String faculty, Task[] tasks) {
+    public GroupId getGroupId() {
+        return groupId;
+    }
+
+    public Student(StudentId studentId, String name, int yearNumber, GroupId groupId, String faculty, List<Task> tasks) {
+        this.studentId = studentId;
         this.name = name;
-        this.cardNumber = cardNumber;
         this.yearNumber = yearNumber;
-        this.groupNumber = groupNumber;
+        this.groupId = groupId;
         this.faculty = faculty;
         this.tasks = tasks;
     }
 
-    public Task[] getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Task[] tasks) {
-        this.tasks = tasks;
-    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public int getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(int cardNumber) {
-        this.cardNumber = cardNumber;
+    public StudentId getStudentId() {
+        return studentId;
     }
 
     public int getYearNumber() {
         return yearNumber;
     }
 
-    public void setYearNumber(int yearNumber) {
-        this.yearNumber = yearNumber;
-    }
-
-    public int getGroupNumber() {
-        return groupNumber;
-    }
-
-    public void setGroupNumber(int groupNumber) {
-        this.groupNumber = groupNumber;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
     public String getFaculty() {
         return faculty;
     }
 
-    public void setFaculty(String faculty) {
-        this.faculty = faculty;
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }
