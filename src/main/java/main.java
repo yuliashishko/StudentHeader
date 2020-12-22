@@ -8,8 +8,8 @@ public class main {
     @SneakyThrows
     public static void main(String[] argc) {
         IDatabase database =
-                new SQLiteDataBase("jdbc:sqlite:C:\\Users\\Professional\\PycharmProjects\\peopleTester\\server\\db\\tester.sqlite");
-        //ICRUDEditor editor = new CUICrudEditor(database);
-        //editor.run();
+                new SQLiteDataBase("jdbc:sqlite:D:\\(my)\\(trash)\\checker.sqlite");
+        ICRUDEditor editor = new CUICrudEditor(database);
+        editor.run();
     }
 }

@@ -156,6 +156,7 @@ public class CUICrudEditor implements ICRUDEditor {
         System.out.println("Введите 1 для добавления новой группы");
         System.out.println("Введите 2 для удаления существующей группы. Удалять можно только пустые группы.");
         System.out.println("Введите 3 для выхода в главное меню");
+        System.out.println("Введите 4 для вывода всех груп");
         Scanner sc = new Scanner(System.in);
         int command = sc.nextInt();
         switch (command) {
@@ -190,6 +191,11 @@ public class CUICrudEditor implements ICRUDEditor {
                 showCRUDGroupForm();
             }
             case 3 -> showMainMenu();
+            case 4 -> {
+                List<Group> groups = database.readGroups();
+                groups.forEach(group -> System.out.println(group.getName()));
+                showCRUDGroupForm();
+            }
         }
     }
 
