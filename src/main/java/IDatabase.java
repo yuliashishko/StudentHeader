@@ -1,3 +1,4 @@
+import java.sql.Date;
 import java.util.List;
 
 public interface IDatabase {
@@ -10,6 +11,8 @@ public interface IDatabase {
     void deleteStudent(StudentId studentId);
 
     void updateStudent(StudentId studentId, Student student);
+
+    void updateStudentTask(StudentId studentId, int taskNumber, String date);
 
     List<Group> readGroups();
 

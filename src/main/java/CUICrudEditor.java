@@ -1,14 +1,3 @@
-//public class SQLDatabase : IDatabase {
-//}
-
-//public class GUICrudEditor {
-//}
-
-import com.sun.source.util.SourcePositions;
-
-import java.net.SocketOption;
-import java.sql.Date;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -21,12 +10,12 @@ public class CUICrudEditor implements ICRUDEditor {
     }
 
     private void outputGroup(Group curr) {
-        System.out.println("Группа " + curr.getGroupId().name);
+        System.out.println("Группа " + curr.getGroupId().id + ' ' + curr.getName());
     }
 
     private void outputStudent(Student curr) {
-        System.out.printf("id = %d %s %d курс %s группа %s факультет \n", curr.getStudentId().cardNumber, curr.getName(),
-                curr.getYearNumber(), curr.getGroupId().name, curr.getFaculty());
+        System.out.printf("id = %d %s %d курс (id группы = %d) %s факультет \n", curr.getStudentId().cardNumber, curr.getName(),
+                curr.getYearNumber(), curr.getGroupId().id, curr.getFaculty());
     }
 
     private void outputStudentTask(Student curr) {
@@ -35,7 +24,7 @@ public class CUICrudEditor implements ICRUDEditor {
         for (Task task : curr.getTasks()) {
             System.out.printf("Задание № %d ", i++);
             if (task.getDate() != null) {
-                System.out.format("Сдана %tD%n\n", task.getDate());
+                System.out.format("Сдана %s\n", task.getDate());
             } else {
                 System.out.print("не сдана\n");
             }
@@ -45,7 +34,7 @@ public class CUICrudEditor implements ICRUDEditor {
     private boolean groupExist(String idGroup) {
         List<Group> groups = database.readGroups();
         for (Group curr : groups) {
-            if (curr.getGroupId().name.equals(idGroup)) {
+            if (Integer.parseInt(idGroup) == curr.getGroupId().id) {
                 return true;
             }
         }
@@ -96,7 +85,7 @@ public class CUICrudEditor implements ICRUDEditor {
         System.out.println("Введите группу для отображения информации о сдаче задач");
         String groupId = sc.next();
         if (groupExist(groupId)) {
-            List<Student> students = database.readGroupStudents(new GroupId(groupId));
+            List<Student> students = database.readGroupStudents(new GroupId(Integer.parseInt(groupId)));
             for (Student curr : students) {
                 outputStudentTask(curr);
             }
@@ -113,9 +102,9 @@ public class CUICrudEditor implements ICRUDEditor {
                 }
                 number -= 1;
                 System.out.println("Введите дату сдачи в формате yyyy/mm/dd");
-                Date date = Date.valueOf(sc.next());
-
-
+                String date = sc.next();
+                database.updateStudentTask(studentId, number, date);
+                System.out.println("Успешно");
             }
         } else {
             System.out.println("Такой группы не существует");
@@ -157,7 +146,9 @@ public class CUICrudEditor implements ICRUDEditor {
             showCRUDStudentForm();
         } else {
             Student newStudent = createStudent(createId);
-            this.database.createStudent(newStudent);
+            this.database.updateStudent(createId, newStudent);
+            System.out.println("Изменения внесены успешно");
+            showCRUDStudentForm();
         }
     }
 
@@ -170,13 +161,17 @@ public class CUICrudEditor implements ICRUDEditor {
         switch (command) {
             case 1 -> {
                 System.out.println("Введите id новой группы");
-                String newName = sc.next();
-                if (groupExist(newName)) {
+                String newId = sc.next();
+                if (groupExist(newId)) {
                     System.out.println("Группа с таким id уже существует. Возвращение в меню редактирования групп");
                     showCRUDGroupForm();
                 }
-                Group group = new Group(new GroupId(newName));
+                System.out.println("Введите имя новой группы");
+                String name = sc.next();
+                Group group = new Group(new GroupId(Integer.parseInt(newId)), name);
                 database.createGroup(group);
+                System.out.println("Успешно добавлено");
+                showCRUDGroupForm();
             }
             case 2 -> {
                 System.out.println("Введите id группы");
@@ -185,11 +180,11 @@ public class CUICrudEditor implements ICRUDEditor {
                     System.out.println("Группа с таким id не существует");
                     showCRUDGroupForm();
                 }
-                List<Student> students = database.readGroupStudents(new GroupId(idDelete));
+                List<Student> students = database.readGroupStudents(new GroupId(Integer.parseInt(idDelete)));
                 if (students.size() != 0) {
                     System.out.println("Невозможно удалить группу, в которой есть студенты. Возвращение в меню редактирования групп");
                 } else {
-                    database.deleteGroup(new GroupId(idDelete));
+                    database.deleteGroup(new GroupId(Integer.parseInt(idDelete)));
                     System.out.println("Группа успешно удалена. Возвращение в меню редактирования групп");
                 }
                 showCRUDGroupForm();
@@ -208,6 +203,8 @@ public class CUICrudEditor implements ICRUDEditor {
         } else {
             Student newStudent = createStudent(createId);
             this.database.createStudent(newStudent);
+            System.out.println("Успешно");
+            showMainMenu();
         }
 
     }
@@ -215,7 +212,7 @@ public class CUICrudEditor implements ICRUDEditor {
     private Student createStudent(StudentId studentId) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Введите имя студента");
-        String name = sc.next();
+        String name = sc.nextLine();
         System.out.println("Введите курс");
         int year = sc.nextInt();
         String groupId;
@@ -232,7 +229,7 @@ public class CUICrudEditor implements ICRUDEditor {
             Task task = new Task(i + 1, null);
             tasks.add(task);
         }
-        Student newStudent = new Student(studentId, name, year, new GroupId(groupId), faculty, tasks);
+        Student newStudent = new Student(studentId, name, year, new GroupId(Integer.parseInt(groupId)), faculty, tasks);
         return newStudent;
     }
 

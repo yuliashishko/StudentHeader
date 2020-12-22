@@ -2,9 +2,9 @@ import java.util.Date;
 
 public class Task {
     private int numberTask;
-    private Date date;
+    private String date;
 
-    public Task(int numberTask, Date date) {
+    public Task(int numberTask, String date) {
         this.numberTask = numberTask;
         this.date = date;
     }
@@ -18,11 +18,11 @@ public class Task {
     }
 
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }

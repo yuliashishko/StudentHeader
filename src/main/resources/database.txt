@@ -1,0 +1,10 @@
+Group Ололошки 1
+Акакий Акакиевич Башмачкин 167 2 1 ФКН null null null
+Кукумбер Батькович Барбадрынц 666 2 1 ФКН null null null
+Елисей Неотдал Фотки 228 2 1 ФКН null 2020-08-09 null
+Типичный Ноунейм Фамилия 169 2 1 ФКН null null null
+Group Lalalend 2
+Badaduc Kukumber Olololsh 157 2 2 ФКН null null null
+Name Lol Surname 168 2 2 ФКН null null null
+Python My Love 166 2 2 ФКН null null null
+Lol Kek Cheburek-Oglы 165 2 2 ФКН null null null

@@ -1,33 +1,38 @@
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class PlaintextDatabase implements IDatabase {
     public static int COUNT_TASKS = 3;
-    TreeMap<StudentId, Student> students;
-    TreeMap<GroupId, Group> groups;
+    Map<StudentId, Student> students;
+    Map<GroupId, Group> groups;
 
     public PlaintextDatabase(String path) {
-        Scanner sc = new Scanner(path);
+        students = new HashMap<>();
+        groups = new HashMap<>();
+        Scanner sc = null;
+        try {
+            sc = new Scanner(Paths.get(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (sc.hasNext()) {
             String[] curr = sc.nextLine().split(" ");
-            if (curr.length == 2) {
-                GroupId groupId = new GroupId(curr[1]);
-                Group group = new Group(groupId);
+            if (curr.length == 3) {
+                GroupId groupId = new GroupId(Integer.parseInt(curr[2]));
+                Group group = new Group(groupId, curr[1]);
                 groups.put(groupId, group);
             } else if (curr.length == 7 + COUNT_TASKS) {
                 StudentId studentId = new StudentId(Integer.parseInt(curr[3]));
-                String name = curr[0] + curr[1] + curr[2];
+                String name = curr[0] + ' ' + curr[1] + ' ' + curr[2];
                 List<Task> tasks = new ArrayList<Task>();
                 for (int i = 0; i < COUNT_TASKS; ++i) {
-                    Task task = new Task(i + 1, curr[7 + i] == "null" ? null : Date.valueOf(curr[7 + i]));
+                    Task task = new Task(i + 1, curr[7 + i].equals("null") ? null : curr[7 + i]);
                     tasks.add(task);
                 }
 
-                Student student = new Student(studentId, name, Integer.parseInt(curr[4]), new GroupId(curr[5]),
-                        curr[6], tasks);
+                Student student = new Student(studentId, name, Integer.parseInt(curr[4]),
+                        new GroupId(Integer.parseInt(curr[5])), curr[6], tasks);
                 students.put(studentId, student);
             }
         }
@@ -73,7 +78,9 @@ public class PlaintextDatabase implements IDatabase {
         students.put(studentId, student);
     }
 
-    public void updateStudentTasks(StudentId studentId, List<Task> tasks) {
-        students.get(studentId).setTasks(tasks);
+
+    public void updateStudentTask(StudentId studentId, int taskNumber, String date) {
+        List<Task> tasks = students.get(studentId).getTasks();
+        tasks.get(taskNumber).setDate(date);
     }
 }
